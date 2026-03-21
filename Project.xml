@@ -57,68 +57,7 @@
       </dependency>
     </dependencies>
     <targets>
-      <target type="executable">
-        <label>example</label>
-        <generator>
-          <switch id="BUILDSTER_OS">
-            <case check="Windows">CodeBlocks - MinGW Makefiles</case>
-            <case check="Linux">CodeBlocks - Unix Makefiles</case>
-            <case check="Darwin">Xcode</case>
-            <default><quit></quit></default>
-          </switch>
-        </generator>
-        <parallel><cores></cores></parallel>
-        <definitions></definitions>
-        <if_check id="BUILDSTER_OS" check="Darwin">
-          <arguments>
-            <!--<if_check id="BUILDSTER_VARIANT" check="Debug">
-              <argument>-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_STYLE=Automatic</argument>
-              <argument>-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY="Apple Development"</argument>
-              <argument>-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_INJECT_BASE_ENTITLEMENTS=YES</argument>
-            </if_check>-->
-            <argument>-DCMAKE_XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH=YES</argument>
-            <argument>-DCMAKE_XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC=YES</argument>
-            <argument>-DCMAKE_XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_WEAK=YES</argument>
-            <argument>-DCMAKE_XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME=NO</argument>
-          </arguments>
-        </if_check>
-        <links>
-          <link>*sfml-graphics*</link>
-          <link>*sfml-window*</link>
-          <link>*sfml-audio*</link>
-          <link>*sfml-network*</link>
-          <link>*sfml-system*</link>
-          <if_check id="BUILDSTER_OS" check="Windows">
-            <link>setupapi</link>
-            <link>iphlpapi</link>
-            <link>psapi</link>
-            <link>userenv</link>
-            <link>gdi32</link>
-            <link>crypt32</link>
-            <link>ws2_32</link>
-          </if_check>
-        </links>
-        <imports>
-          <import>sfml</import>
-        </imports>
-        <if_check id="BUILDSTER_OS" check="Darwin">
-          <packages>
-            <package>
-              <label>QuartzCore</label>
-              <exports>
-                <export type="headers">
-                  <key>QUARTZCORE_INCLUDE_DIR</key>
-                  <value></value>
-                </export>
-                <export type="libraries">
-                  <key>QUARTZCORE_LIBRARY</key>
-                  <value></value>
-                </export>
-              </exports>
-            </package>
-          </packages>
-        </if_check>
-      </target>
+      <include><data id="BUILDSTER_WD"></data>/Target.xml</include>
     </targets>
   </project>
 </buildster>
