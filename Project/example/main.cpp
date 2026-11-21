@@ -42,7 +42,7 @@ public:
         velocity(velocity)
     {
         setRadius(radius);
-        setOrigin(radius*0.5f, radius*0.5f);
+        setOrigin(sf::Vector2f(radius*0.5f, radius*0.5f));
     }
     const sf::Vector2f& getVelocity() const
     {
@@ -59,18 +59,16 @@ int main()
     std::vector<Bullet*> bullets;
     Player* player = new Player(25.0f);
     sf::RenderWindow* window = new sf::RenderWindow();
-    window->create(sf::VideoMode(1280, 720), "Game");
+    window->create(sf::VideoMode(sf::Vector2u(1280, 720)), "Game");
     window->setFramerateLimit(60);
     player->setPosition(sf::Vector2f(window->getSize())*0.5f);
     player->setFillColor(sf::Color::Green);
     while (window->isOpen())
     {
-        sf::Event event;
-        while (window->pollEvent(event))
+        while (auto event = window->pollEvent())
         {
-            switch (event.type)
+            if (event->is<sf::Event::Closed>())
             {
-            case sf::Event::Closed:
                 window->close();
                 break;
             }
@@ -85,7 +83,7 @@ int main()
             sf::Vector2f velocity = player->getPosition()-enemies[i]->getPosition();
             velocity *= 5.0f/sqrtf((velocity.x*velocity.x)+(velocity.y*velocity.y));
             enemies[i]->move(velocity);
-            if (enemies[i]->getGlobalBounds().intersects(player->getGlobalBounds()))
+            if (enemies[i]->getGlobalBounds().findIntersection(player->getGlobalBounds()))
             {
                 window->close();
                 break;
@@ -93,7 +91,7 @@ int main()
             window->draw(*enemies[i]);
             for (int j = 0; j != bullets.size(); ++j)
             {
-                if (bullets[j]->getGlobalBounds().intersects(enemies[i]->getGlobalBounds()))
+                if (bullets[j]->getGlobalBounds().findIntersection(enemies[i]->getGlobalBounds()))
                 {
                     ++score;
                     std::cout << score << std::endl;
@@ -114,7 +112,7 @@ int main()
         {
             bullets[i]->move(bullets[i]->getVelocity());
             window->draw(*bullets[i]);
-            if (!sf::FloatRect(0.0f, 0.0f, window->getSize().x, window->getSize().y).contains(bullets[i]->getPosition()))
+            if (!sf::FloatRect(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(window->getSize().x, window->getSize().y)).contains(bullets[i]->getPosition()))
             {
                 delete bullets[i];
                 bullets.erase(bullets.begin()+i);
@@ -123,23 +121,23 @@ int main()
         }
         window->draw(*player);
         window->display();
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
         {
-            player->move(-player->getRadius()*0.5f, 0.0f);
+            player->move(sf::Vector2f(-player->getRadius()*0.5f, 0.0f));
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
         {
-            player->move(0.0f, -player->getRadius()*0.5f);
+            player->move(sf::Vector2f(0.0f, -player->getRadius()*0.5f));
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
         {
-            player->move(player->getRadius()*0.5f, 0.0f);
+            player->move(sf::Vector2f(player->getRadius()*0.5f, 0.0f));
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
         {
-            player->move(0.0f, player->getRadius()*0.5f);
+            player->move(sf::Vector2f(0.0f, player->getRadius()*0.5f));
         }
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
         {
             if (step%5 == 0)
             {
@@ -147,7 +145,7 @@ int main()
                 velocity *= player->getRadius()/sqrtf((velocity.x*velocity.x)+(velocity.y*velocity.y));
                 bullets.push_back(new Bullet(5.0f, velocity));
                 bullets.back()->setPosition(player->getPosition());
-                bullets.back()->move(player->getRadius()*0.5f, player->getRadius()*0.5f);
+                bullets.back()->move(sf::Vector2f(player->getRadius()*0.5f, player->getRadius()*0.5f));
                 bullets.back()->setFillColor(sf::Color::Cyan);
             }
         }

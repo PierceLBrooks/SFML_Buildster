@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<buildster directory="build" distribution="../Distribution">
-  <project directory="../Project">
+<buildster directory="build" distribution="../Distribution" cpp="17" sudo="false">
+  <project directory="../Project" cmake_modules="../cmake">
     <dependencies>
       <dependency>
         <label>sfml</label>
@@ -8,7 +8,7 @@
         <remote>
           <url>https://github.com/SFML/SFML.git</url>
           <git_repo>
-            <branch>2.5.1</branch>
+            <branch>3.0.1</branch>
             <credentials>
               <username>username</username>
               <password>password</password>
@@ -16,7 +16,9 @@
           </git_repo>
         </remote>
         <build>
-          <arguments></arguments>
+          <arguments>
+            <argument>-DBUILD_SHARED_LIBS=ON</argument>
+          </arguments>
           <cmake>
             <generator>
               <switch id="BUILDSTER_OS">
@@ -27,6 +29,7 @@
               </switch>
             </generator>
             <source>..</source>
+            <parallel><cores></cores></parallel>
           </cmake>
         </build>
         <exports>
@@ -35,11 +38,11 @@
             <value><install></install></value>
           </export>
           <export type="headers">
-            <key>SFML_INCLUDE_PATH</key>
+            <key>SFML_INCLUDE_DIR</key>
             <value><install></install>/include</value>
           </export>
           <export type="libraries">
-            <key>SFML_LIBRARIES_PATH</key>
+            <key>SFML_LIBRARIES_DIR</key>
             <value>
               <switch id="BUILDSTER_OS">
                 <case check="Windows"><install></install>/bin</case>
@@ -64,7 +67,21 @@
             <default><quit></quit></default>
           </switch>
         </generator>
+        <parallel><cores></cores></parallel>
         <definitions></definitions>
+        <if_check id="BUILDSTER_OS" check="Darwin">
+          <arguments>
+            <!--<if_check id="BUILDSTER_VARIANT" check="Debug">
+              <argument>-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_STYLE=Automatic</argument>
+              <argument>-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY="Apple Development"</argument>
+              <argument>-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_INJECT_BASE_ENTITLEMENTS=YES</argument>
+            </if_check>-->
+            <argument>-DCMAKE_XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH=YES</argument>
+            <argument>-DCMAKE_XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC=YES</argument>
+            <argument>-DCMAKE_XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_WEAK=YES</argument>
+            <argument>-DCMAKE_XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME=NO</argument>
+          </arguments>
+        </if_check>
         <links>
           <link>*sfml-graphics*</link>
           <link>*sfml-window*</link>
@@ -84,6 +101,23 @@
         <imports>
           <import>sfml</import>
         </imports>
+        <if_check id="BUILDSTER_OS" check="Darwin">
+          <packages>
+            <package>
+              <label>QuartzCore</label>
+              <exports>
+                <export type="headers">
+                  <key>QUARTZCORE_INCLUDE_DIR</key>
+                  <value></value>
+                </export>
+                <export type="libraries">
+                  <key>QUARTZCORE_LIBRARY</key>
+                  <value></value>
+                </export>
+              </exports>
+            </package>
+          </packages>
+        </if_check>
       </target>
     </targets>
   </project>
