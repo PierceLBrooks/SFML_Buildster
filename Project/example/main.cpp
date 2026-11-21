@@ -10,6 +10,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
+#include <example/OuterTester.hpp>
 
 class Player : public sf::CircleShape
 {
@@ -50,7 +51,7 @@ public:
     }
 };
 
-int main()
+int main(int argc, char** argv)
 {
     int score = 0;
     int step = 0;
@@ -63,6 +64,7 @@ int main()
     window->setFramerateLimit(60);
     player->setPosition(sf::Vector2f(window->getSize())*0.5f);
     player->setFillColor(sf::Color::Green);
+    //std::cout << eg::OuterTester::outerTest(argc) << std::endl;
     while (window->isOpen())
     {
         while (auto event = window->pollEvent())

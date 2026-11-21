@@ -1,5 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <target type="executable">
+  <classes>
+    <class>
+      <label>OuterTester</label>
+      <classes>
+        <class>
+          <label>InnerTester</label>
+          <functions>
+            <function>
+              <label>innerTest</label>
+              <return>bool</return>
+              <arguments>
+                <argument>int argc</argument>
+              </arguments>
+              <qualifiers>
+                <qualifier>static</qualifier>
+              </qualifiers>
+              <body>{
+                return (argc > 0);
+              }</body>
+            </function>
+          </functions>
+        </class>
+      </classes>
+      <functions>
+        <function>
+          <label>outerTest</label>
+          <return>bool</return>
+          <arguments>
+            <argument>int argc</argument>
+          </arguments>
+          <qualifiers>
+            <qualifier>static</qualifier>
+          </qualifiers>
+          <body>{
+            return InnerTester::innerTest(argc);
+          }</body>
+        </function>
+      </functions>
+      <namespaces>
+        <namespace>eg</namespace>
+      </namespaces>
+    </class>
+  </classes>
   <label>example</label>
   <generator>
     <switch id="BUILDSTER_OS">
